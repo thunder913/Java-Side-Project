@@ -1,3 +1,0 @@
-This is a test file.
-It is meant to use only for test purposes.
-The lines should change and some words too.
