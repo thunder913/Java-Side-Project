@@ -41,6 +41,8 @@ public class Main {
 
             input = getInput();
         }
+
+        System.out.println("Exiting...");
     }
 
     private static void loadFile() throws FileNotFoundException, IndexOutOfBoundsException, SameLineIndexException, IOException {
@@ -59,24 +61,19 @@ public class Main {
             getPath();
         }
 
-        //Check if file exists and if it doesn't then we throw an exception
-        if (!fileExists()){
-            throw new FileNotFoundException();
-        }
-
         System.out.println("The file was found! What do you want to change: Lines | Words");
         String option = scan.nextLine();
 
         switch (option.toLowerCase()){
-            case "lines": switchLines(path); break;
-            case "words": switchWords(path); break;
+            case "lines": switchLines(); break;
+            case "words": switchWords(); break;
             default:
                 System.out.println(invalidCommandMessage);
                 break;
         }
     }
 
-    private static void switchLines(String path) throws IOException, IndexOutOfBoundsException {
+    private static void switchLines() throws IOException, IndexOutOfBoundsException {
         System.out.println("Enter line indexes in the following format:\'<index1> <index2>\'.");
         String[] lineIndexes = scan.nextLine().split(" ");
 
@@ -102,7 +99,7 @@ public class Main {
     }
 
 
-    private static void switchWords(String path) throws IOException, SameLineIndexException {
+    private static void switchWords() throws IOException, SameLineIndexException {
         System.out.println("Enter line indexes in the following format:\'<first line index> <word index> <second line index> <word index>\'.");
         String[] lineIndexes = scan.nextLine().split(" ");
 
@@ -178,9 +175,14 @@ public class Main {
         return scan.nextLine();
     }
 
-    private static void getPath(){
+    private static void getPath() throws FileNotFoundException {
+        String oldPath = path;
         System.out.print("Enter the file path: ");
         path = scan.nextLine();
+        if (!fileExists()){
+            path = oldPath;
+            throw new FileNotFoundException();
+        }
     }
 
     private static boolean fileExists(){
