@@ -51,6 +51,9 @@ public class Main {
             String input = scan.nextLine();
             if (input.toLowerCase().equals("no")) {
                 getPath();
+            }else if(!input.toLowerCase().equals("yes")){
+                System.out.println(invalidCommandMessage);
+                return;
             }
         }else{
             getPath();
@@ -72,6 +75,32 @@ public class Main {
                 break;
         }
     }
+
+    private static void switchLines(String path) throws IOException, IndexOutOfBoundsException {
+        System.out.println("Enter line indexes in the following format:\'<index1> <index2>\'.");
+        String[] lineIndexes = scan.nextLine().split(" ");
+
+        //We reduce 1, because the lines in a normal document start from 1, but here in the list they start from 0
+        int indexOne = Integer.parseInt(lineIndexes[0]) - 1;
+        int indexTwo = Integer.parseInt(lineIndexes[1]) - 1;
+
+        //Get the file content
+        List<String> fileContent = getFileContent(path);
+
+        //Getting the value of the two lines
+        String lineOne = fileContent.get(indexOne);
+        String lineTwo = fileContent.get(indexTwo);
+
+        //Switching the values of the lines
+        fileContent.set(indexOne, lineTwo);
+        fileContent.set(indexTwo, lineOne);
+
+        //Writing in the file
+        writeToFile(path, fileContent);
+
+        System.out.printf("Successfully switched lines %d and %d.\n", indexOne+1, indexTwo+1);
+    }
+
 
     private static void switchWords(String path) throws IOException, SameLineIndexException {
         System.out.println("Enter line indexes in the following format:\'<first line index> <word index> <second line index> <word index>\'.");
@@ -118,32 +147,6 @@ public class Main {
         System.out.printf("Successfully changed the positions of: %s and %s.\n", wordOne, wordTwo);
     }
 
-
-
-    private static void switchLines(String path) throws IOException, IndexOutOfBoundsException {
-        System.out.println("Enter line indexes in the following format:\'<index1> <index2>\'.");
-        String[] lineIndexes = scan.nextLine().split(" ");
-
-        //We reduce 1, because the lines in a normal document start from 1, but here in the list they start from 0
-        int indexOne = Integer.parseInt(lineIndexes[0]) - 1;
-        int indexTwo = Integer.parseInt(lineIndexes[1]) - 1;
-
-        //Get the file content
-        List<String> fileContent = getFileContent(path);
-
-        //Getting the value of the two lines
-        String lineOne = fileContent.get(indexOne);
-        String lineTwo = fileContent.get(indexTwo);
-
-        //Switching the values of the lines
-        fileContent.set(indexOne, lineTwo);
-        fileContent.set(indexTwo, lineOne);
-
-        //Writing in the file
-        writeToFile(path, fileContent);
-
-        System.out.printf("Successfully switched lines %d and %d.\n", indexOne+1, indexTwo+1);
-    }
 
     private static List<String> getFileContent(String path) throws IOException {
         //Creating a BufferReader to read all the lines in the file
