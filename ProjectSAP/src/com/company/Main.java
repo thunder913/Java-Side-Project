@@ -73,7 +73,7 @@ public class Main {
         }
     }
 
-    private static void switchLines() throws IOException, IndexOutOfBoundsException {
+    private static void switchLines() throws IOException, IndexOutOfBoundsException, SameLineIndexException {
         System.out.println("Enter line indexes in the following format:\'<index1> <index2>\'.");
         String[] lineIndexes = scan.nextLine().split(" ");
 
@@ -81,6 +81,10 @@ public class Main {
         int indexOne = Integer.parseInt(lineIndexes[0]) - 1;
         int indexTwo = Integer.parseInt(lineIndexes[1]) - 1;
 
+        //Checks if the user entered the same line twice
+        if (indexOne == indexTwo){
+            throw new SameLineIndexException(String.format("You cannot switch %d and %d, because the equal!", indexOne+1, indexTwo+1));
+        }
         //Get the file content
         List<String> fileContent = getFileContent(path);
 
